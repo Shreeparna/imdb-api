@@ -3,12 +3,12 @@ import java.sql.*;
 
 
 public class MySqlConnector {
-    private static Connection con = null;
+    public Connection con = null;
     private static MySqlConnector mySqlConnectorInstance=null;
     private MySqlConnector(){
         String url= "jdbc:mysql://localhost:3306/";
         String dbName = "imdb_Api";
-        String driver = "com.mysql.jdbc.Driver";
+        String driver = "com.mysql.cj.jdbc.Driver";
         String userName = "root";
         String password = "root@123";
 

@@ -5,7 +5,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class ImdbExternalApi {
+public class ImdbExternalDaoApi {
     public static void getImdbMovieDetailsFromName(String movieName){
         String urlString = "http://www.omdbapi.com/?apikey=PlzBanM3&t="+movieName;
         try {

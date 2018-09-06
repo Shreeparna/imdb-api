@@ -1,17 +1,28 @@
 package apis;
 
 import static spark.Spark.get;
+
+import model.ImdbMovie;
+import repos.dao.ImdbMovieStoreDao;
+import services.ImdbService;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 
 public class ImdbApi {
+    private ImdbService imdbService;
+    public ImdbApi(ImdbService imdbService){
+        this.imdbService = imdbService;
+    }
 
-    public static void getUserDetails() {
+    public void getUserDetails() {
         get(new Route("/users/:id") {
             @Override
             public Object handle(Request request, Response response) {
@@ -20,7 +31,7 @@ public class ImdbApi {
         });
     }
 
-    public static void getImdbMoviesByDate(){
+    public void getImdbMoviesByDate(){
         get(new Route("/getMovies/date/:date"){
             @Override
             public Object handle(Request request, Response response) {
@@ -37,7 +48,7 @@ public class ImdbApi {
         });
     }
 
-    public static void getImdbMoviesByName(){
+    public void getImdbMoviesByName(){
         get(new Route("/getMovies/name/:name"){
             @Override
             public Object handle(Request request, Response response) {
@@ -48,24 +59,29 @@ public class ImdbApi {
         });
     }
 
-    public static void getImdbMoviesByMultipleParams(){
-        get(new Route("/getMovies/"){
+    public void getImdbMoviesByMultipleParams() {
+        get(new Route("/getMovies"){
             @Override
             public Object handle(Request request, Response response) {
-                Set<String> queryParams = request.queryParams();
-                String name = request.queryParams(":name");
-                String date = request.queryParams(":date");
-                StringBuilder str = new StringBuilder();
-                
-                for(String param : queryParams){
-                    str.append(param).append(" ").append(request.queryParams(param)).append("<br />");
+                Map<String, String> paramValueMap = new HashMap<>();
+                for(String param : request.queryParams()) {
+                    paramValueMap.put(param, request.queryParams(param));
                 }
-                return str;
+                String movies = null;
+                try {
+                    movies = imdbService.getMovieList(paramValueMap);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+//                Set<String> queryParams = request.queryParams();
+//                StringBuilder str = new StringBuilder();
+//                for(String param : queryParams){
+//                    str.append(param).append(" ").append(request.queryParams(param)).append("<br />");
+//                }
+                return movies;
             }
         });
     }
-
-
-
 
 }

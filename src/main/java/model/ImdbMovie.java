@@ -15,8 +15,9 @@ public class ImdbMovie {
     double imdbRating;
     String imdbId;
     String type;
+    String production;
 
-    public ImdbMovie(int id, String movie_title, int year, Date released, int runtime, String genre, String director, String language, String country, double imdbRating, String imdbId, String type) {
+    public ImdbMovie(int id, String movie_title, int year, Date released, int runtime, String genre, String director, String language, String country, double imdbRating, String imdbId, String type, String production) {
         this.id = id;
         this.movie_title = movie_title;
         this.year = year;
@@ -29,6 +30,7 @@ public class ImdbMovie {
         this.imdbRating = imdbRating;
         this.imdbId = imdbId;
         this.type = type;
+        this.production = production;
     }
 
     public ImdbMovie() {
@@ -128,5 +130,18 @@ public class ImdbMovie {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getProduction() {
+        return production;
+    }
+
+    public void setProduction(String production) {
+        this.production = production;
+    }
+
+    @Override
+    public String toString(){
+        return this.movie_title+" - "+this.released;
     }
 }
