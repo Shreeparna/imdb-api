@@ -6,6 +6,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface ImdbMovieStoreDao {
-    public List<ImdbMovie> getMoviesByName(String name) throws SQLException;
+    public List<ImdbMovie> getMoviesByName(String name) throws Exception;
     public void getMovies(String name, int year);
 }

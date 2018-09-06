@@ -3,6 +3,7 @@ package services;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import model.ImdbMovie;
+import repos.ImdbExternalDaoApi;
 import repos.dao.ImdbMovieStoreDao;
 
 import java.lang.reflect.Type;
@@ -13,10 +14,12 @@ import java.util.Set;
 
 public class ImdbService {
     private ImdbMovieStoreDao imdbMovieStoreDao;
+    private ImdbExternalDaoApi imdbExternalDaoApi;
     public ImdbService(ImdbMovieStoreDao imdbMovieStoreDao) {
         this.imdbMovieStoreDao = imdbMovieStoreDao;
+        this.imdbExternalDaoApi = new ImdbExternalDaoApi();
     }
-    public  String getMovieList(Map<String,String> params) throws SQLException {
+    public  String getMovieList(Map<String,String> params) throws Exception {
         boolean hasNameParam = params.containsKey("name");
         boolean hasDateParam = params.containsKey("date");
         List<ImdbMovie> movieList = null;
@@ -25,7 +28,7 @@ public class ImdbService {
             movieList = imdbMovieStoreDao.getMoviesByName(params.get("name"));
         }
         if(movieList.size()==0){
-
+            imdbExternalDaoApi.getMoviesByName(params.get("name"));
         }
 
         Gson gson = new Gson();

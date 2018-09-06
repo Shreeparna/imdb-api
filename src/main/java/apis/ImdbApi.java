@@ -70,7 +70,7 @@ public class ImdbApi {
                 String movies = null;
                 try {
                     movies = imdbService.getMovieList(paramValueMap);
-                } catch (SQLException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
