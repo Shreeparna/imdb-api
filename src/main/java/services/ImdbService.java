@@ -1,7 +1,11 @@
 package services;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import model.ImdbMovie;
 import repos.dao.ImdbMovieStoreDao;
+
+import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -20,14 +24,16 @@ public class ImdbService {
         if(hasNameParam) {
             movieList = imdbMovieStoreDao.getMoviesByName(params.get("name"));
         }
-        if(movieList.size()!=0){
+        if(movieList.size()==0){
 
         }
 
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<ImdbMovie>>() {}.getType();
+        String json = gson.toJson(movieList, type);
 
 
-        StringBuilder moviesStr= new StringBuilder();
-        movieList.forEach(movie -> moviesStr.append(movie.toString()));
-        return moviesStr.toString();
+
+        return json;
     }
 }

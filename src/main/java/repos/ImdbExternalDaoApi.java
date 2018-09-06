@@ -6,9 +6,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class ImdbExternalDaoApi {
-    public static void getImdbMovieDetailsFromName(String movieName){
+    public static String getImdbMovieDetailsFromName(String movieName) throws Exception{
         String urlString = "http://www.omdbapi.com/?apikey=PlzBanM3&t="+movieName;
-        try {
             URL url = new URL(urlString);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
@@ -20,10 +19,8 @@ public class ImdbExternalDaoApi {
                 response.append(inputLine);
             }
             in.close();
-            System.out.println(response.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//            System.out.println(response.toString());
+            return response.toString();
 
     }
 }
