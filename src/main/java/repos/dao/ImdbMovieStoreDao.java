@@ -8,5 +8,5 @@ import java.util.List;
 public interface ImdbMovieStoreDao {
     public List<ImdbMovie> getMoviesByName(String name) throws Exception;
     public void getMovies(String name, int year);
-    public void setMovies(List<ImdbMovie> movieList);
+    public void setMovies(List<ImdbMovie> movieList) throws Exception;
 }

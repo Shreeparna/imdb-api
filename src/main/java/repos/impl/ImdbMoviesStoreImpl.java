@@ -6,20 +6,22 @@ import repos.dao.ImdbMovieStoreDao;
 import repos.dataSource.DataSource;
 import resources.MySqlConnector;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ImdbMoviesStoreImpl implements ImdbMovieStoreDao, DataSource {
+    Connection con=null;
+    public ImdbMoviesStoreImpl(){
+        con = MySqlConnector.getConnection().con;
+    }
+
     @Override
     public List<ImdbMovie> getMoviesByName(String name) throws Exception {
-        Connection con = MySqlConnector.getConnection().con;
         Statement statement = con.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT * FROM imdb_api.imdb_movie_store where movie_title like '%" + name + "%'");
         List<ImdbMovie> imdbMovies = new ArrayList<>();
@@ -48,7 +50,7 @@ public class ImdbMoviesStoreImpl implements ImdbMovieStoreDao, DataSource {
     }
 
     private Date getDateFromString(String released) throws ParseException{
-        DateFormat format = new SimpleDateFormat("dd MMM yyyy");
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.parse(released);
     }
 
@@ -58,8 +60,29 @@ public class ImdbMoviesStoreImpl implements ImdbMovieStoreDao, DataSource {
     }
 
     @Override
-    public void setMovies(List<ImdbMovie> movieList) {
+    public void setMovies(List<ImdbMovie> movieList) throws Exception{
+        String query = "Insert into imdb_api.imdb_movie_store (movie_title, year, released, runtime, genre, director, language, country, " +
+                " imdbRating, imdbId, type, production) values";
+        String values="";
 
+        if(movieList.size()==1){
+            values +=getValuesString(movieList.get(0));
+        }
+        else {
+            for (ImdbMovie movie : movieList) {
+                if (values == "") {
+                    values += getValuesString(movie);
+                } else {
+                    values += ", " + getValuesString(movie);
+                }
+            }
+
+            values = "("+values+")";
+
+        }
+        query=query+values+";";
+        PreparedStatement preparedStmt = con.prepareStatement(query);
+        preparedStmt.execute();
     }
 
     @Override
@@ -70,5 +93,20 @@ public class ImdbMoviesStoreImpl implements ImdbMovieStoreDao, DataSource {
             movieList = getMoviesByName(paramValueList.get(Params.NAME));
         }
         return movieList;
+    }
+
+    public String getValuesString(ImdbMovie movie) throws Exception{
+        String values="";
+        DateFormat formatter = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
+        Date date = (Date)formatter.parse(movie.getReleased().toString());
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+//        String formatedDate = cal.get(Calendar.DATE) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.YEAR);
+        String formatedDate = cal.get(Calendar.YEAR) +"-"+(cal.get(Calendar.MONTH) + 1)+"-"+cal.get(Calendar.DATE);
+
+        values+= "('"+movie.getMovie_title()+"',"+movie.getYear()+",'"+formatedDate+"','"+movie.getRuntime()+"','"+movie.getGenre()+"','"+
+                movie.getDirector()+"','"+movie.getLanguage()+"','"+movie.getCountry()+"',"+movie.getImdbRating()+",'"+movie.getImdbId()+"','"+
+                movie.getType()+"','"+movie.getProduction()+"')";
+        return values;
     }
 }

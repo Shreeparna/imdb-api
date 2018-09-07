@@ -6,7 +6,9 @@ import factory.MovieDataSourceFactory;
 import lib.DataSourceType;
 import lib.Params;
 import model.ImdbMovie;
+import repos.dao.ImdbMovieStoreDao;
 import repos.dataSource.DataSource;
+import repos.impl.ImdbMoviesStoreImpl;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -15,8 +17,10 @@ import java.util.Map;
 
 public class ImdbService {
     MovieDataSourceFactory movieDataSourceFactoryInstance;
+    ImdbMovieStoreDao imdbMovieStoreDao;
     public ImdbService(){
         movieDataSourceFactoryInstance = MovieDataSourceFactory.getInstance();
+        imdbMovieStoreDao = new ImdbMoviesStoreImpl();
     }
     public  String getMovieList(Map<String,String> params) throws Exception {
         Params param=null;
@@ -47,6 +51,7 @@ public class ImdbService {
         if(movieList.size()==0){
             dataSource = movieDataSourceFactoryInstance.getDataSource(DataSourceType.API);
             movieList = dataSource.getMovies(paramValueList);
+            imdbMovieStoreDao.setMovies(movieList);
         }
 
         Gson gson = new Gson();
