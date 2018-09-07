@@ -14,3 +14,6 @@ public class IMDBApiManager {
         imdbRoutes.getImdbMoviesByMultipleParams();
     }
 }
+
+
+//http://localhost:4567/getMovies?name=IT&date=12-12-12

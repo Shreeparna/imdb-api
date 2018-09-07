@@ -23,7 +23,10 @@ public class MovieDataSourceFactory {
     }
     public DataSource getDataSource(DataSourceType source){
         switch(source){
-            case DB: dataSource = new ImdbMoviesStoreImpl();
+            case DB: {
+                dataSource = new ImdbMoviesStoreImpl();
+                break;
+            }
             case API: dataSource = new ImdbExternalDaoApi();
         }
         return dataSource;

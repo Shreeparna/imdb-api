@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class ImdbService {
     MovieDataSourceFactory movieDataSourceFactoryInstance;
-    public void ImdbService(){
+    public ImdbService(){
         movieDataSourceFactoryInstance = MovieDataSourceFactory.getInstance();
     }
     public  String getMovieList(Map<String,String> params) throws Exception {
@@ -43,9 +43,7 @@ public class ImdbService {
         }
 
         dataSource = movieDataSourceFactoryInstance.getDataSource(DataSourceType.DB);
-        if(hasNameParam) {
-            movieList = dataSource.getMovies(paramValueList);
-        }
+        movieList = dataSource.getMovies(paramValueList);
         if(movieList.size()==0){
             dataSource = movieDataSourceFactoryInstance.getDataSource(DataSourceType.API);
             movieList = dataSource.getMovies(paramValueList);
