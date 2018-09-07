@@ -1,12 +1,12 @@
 package repos.impl;
 
+import lib.Params;
 import model.ImdbMovie;
 import repos.dao.ImdbMovieStoreDao;
+import repos.dataSource.DataSource;
 import resources.MySqlConnector;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -14,8 +14,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
-public class ImdbMoviesStoreImpl implements ImdbMovieStoreDao {
+public class ImdbMoviesStoreImpl implements ImdbMovieStoreDao, DataSource {
     @Override
     public List<ImdbMovie> getMoviesByName(String name) throws Exception {
         Connection con = MySqlConnector.getConnection().con;
@@ -46,7 +47,7 @@ public class ImdbMoviesStoreImpl implements ImdbMovieStoreDao {
         return imdbMovie;
     }
 
-    private Date getDateFromString(String released) throws ParseException {
+    private Date getDateFromString(String released) throws ParseException{
         DateFormat format = new SimpleDateFormat("dd MMM yyyy");
         return format.parse(released);
     }
@@ -54,5 +55,20 @@ public class ImdbMoviesStoreImpl implements ImdbMovieStoreDao {
     @Override
     public void getMovies(String name, int year) {
 
+    }
+
+    @Override
+    public void setMovies(List<ImdbMovie> movieList) {
+
+    }
+
+    @Override
+    public List<ImdbMovie> getMovies(Map<Params,String> paramValueList) throws Exception {
+        List<ImdbMovie> movieList=null;
+
+        if(paramValueList.containsKey(Params.NAME) && paramValueList.size()==1){
+            movieList = getMoviesByName(paramValueList.get(Params.NAME));
+        }
+        return movieList;
     }
 }

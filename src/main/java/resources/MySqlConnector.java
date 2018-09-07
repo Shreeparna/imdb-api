@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class MySqlConnector {
     public Connection con = null;
-    private static MySqlConnector mySqlConnectorInstance=null;
+    private static volatile MySqlConnector mySqlConnectorInstance=null;
     private MySqlConnector(){
         String url= "jdbc:mysql://localhost:3306/";
         String dbName = "imdb_Api";

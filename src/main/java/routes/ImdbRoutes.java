@@ -1,24 +1,19 @@
-package apis;
+package routes;
 
 import static spark.Spark.get;
 
-import model.ImdbMovie;
-import repos.dao.ImdbMovieStoreDao;
 import services.ImdbService;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class ImdbApi {
+public class ImdbRoutes {
     private ImdbService imdbService;
-    public ImdbApi(ImdbService imdbService){
+    public ImdbRoutes(ImdbService imdbService){
         this.imdbService = imdbService;
     }
 
@@ -73,12 +68,6 @@ public class ImdbApi {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-//                Set<String> queryParams = request.queryParams();
-//                StringBuilder str = new StringBuilder();
-//                for(String param : queryParams){
-//                    str.append(param).append(" ").append(request.queryParams(param)).append("<br />");
-//                }
                 return movies;
             }
         });
