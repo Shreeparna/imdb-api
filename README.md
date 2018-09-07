@@ -13,6 +13,7 @@ runtime varchar(50), genre varchar(100), director varchar(50), language varchar(
 imdbRating float(10,5), imdbId varchar(300), type varchar(50), production varchar(200));
 
 Rest Api Exposed - /getMovies
+
 http://localhost:4567/getMovies?name=IT
 
 Working for key - name
