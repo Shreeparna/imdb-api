@@ -8,12 +8,16 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ImdbMoviesStoreImpl implements ImdbMovieStoreDao {
     @Override
-    public List<ImdbMovie> getMoviesByName(String name) throws SQLException {
+    public List<ImdbMovie> getMoviesByName(String name) throws Exception {
         Connection con = MySqlConnector.getConnection().con;
         Statement statement = con.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT * FROM imdb_api.imdb_movie_store where movie_title like '%" + name + "%'");
@@ -24,13 +28,13 @@ public class ImdbMoviesStoreImpl implements ImdbMovieStoreDao {
         return imdbMovies;
     }
 
-    private ImdbMovie getImdbMovie(ResultSet resultSet) throws SQLException {
+    private ImdbMovie getImdbMovie(ResultSet resultSet) throws Exception {
         ImdbMovie imdbMovie = new ImdbMovie();
         imdbMovie.setId(resultSet.getInt("id"));
         imdbMovie.setMovie_title(resultSet.getString("movie_title"));
         imdbMovie.setYear(resultSet.getInt("year"));
-        imdbMovie.setReleased(resultSet.getDate("released"));
-        imdbMovie.setRuntime(resultSet.getInt("runtime"));
+        imdbMovie.setReleased(getDateFromString(resultSet.getString("released")));
+        imdbMovie.setRuntime(resultSet.getString("runtime"));
         imdbMovie.setGenre(resultSet.getString("genre"));
         imdbMovie.setDirector(resultSet.getString("director"));
         imdbMovie.setLanguage(resultSet.getString("language"));
@@ -40,6 +44,11 @@ public class ImdbMoviesStoreImpl implements ImdbMovieStoreDao {
         imdbMovie.setType(resultSet.getString("type"));
         imdbMovie.setProduction(resultSet.getString("production"));
         return imdbMovie;
+    }
+
+    private Date getDateFromString(String released) throws ParseException {
+        DateFormat format = new SimpleDateFormat("dd MMM yyyy");
+        return format.parse(released);
     }
 
     @Override

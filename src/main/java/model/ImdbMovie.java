@@ -1,23 +1,49 @@
 package model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 
 public class ImdbMovie {
     int id;
+
+    @SerializedName("Title")
     String movie_title;
+
+    @SerializedName("Year")
     int year;
+
+    @SerializedName("Released")
     Date released;
-    int runtime;
+
+    @SerializedName("Runtime")
+    String runtime;
+
+    @SerializedName("Genre")
     String genre;
+
+    @SerializedName("Director")
     String director;
+
+    @SerializedName("Language")
     String language;
+
+    @SerializedName("Country")
     String country;
+
+    @SerializedName("imdbRating")
     double imdbRating;
+
+    @SerializedName("imdbID")
     String imdbId;
+
+    @SerializedName("Type")
     String type;
+
+    @SerializedName("Production")
     String production;
 
-    public ImdbMovie(int id, String movie_title, int year, Date released, int runtime, String genre, String director, String language, String country, double imdbRating, String imdbId, String type, String production) {
+    public ImdbMovie(int id, String movie_title, int year, Date released, String runtime, String genre, String director, String language, String country, double imdbRating, String imdbId, String type, String production) {
         this.id = id;
         this.movie_title = movie_title;
         this.year = year;
@@ -68,11 +94,11 @@ public class ImdbMovie {
         this.released = released;
     }
 
-    public int getRuntime() {
+    public String getRuntime() {
         return runtime;
     }
 
-    public void setRuntime(int runtime) {
+    public void setRuntime(String runtime) {
         this.runtime = runtime;
     }
 

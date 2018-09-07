@@ -28,15 +28,12 @@ public class ImdbService {
             movieList = imdbMovieStoreDao.getMoviesByName(params.get("name"));
         }
         if(movieList.size()==0){
-            imdbExternalDaoApi.getMoviesByName(params.get("name"));
+            movieList = imdbExternalDaoApi.getMoviesByName(params.get("name"));
         }
 
         Gson gson = new Gson();
         Type type = new TypeToken<List<ImdbMovie>>() {}.getType();
         String json = gson.toJson(movieList, type);
-
-
-
         return json;
     }
 }
